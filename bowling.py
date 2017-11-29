@@ -2,6 +2,11 @@ def score(game):
     result = 0
     frame = 1
     in_first_half = True
+    result = change_result(game, frame, in_first_half, result)
+    return result
+
+
+def change_result(game, frame, in_first_half, result):
     for i in range(len(game)):
         if game[i] == '/':
             result += 10 - last
@@ -12,7 +17,7 @@ def score(game):
         if frame < 10 and get_value(game[i]) == 10:
             if game[i] == '/':
                 result += get_value(game[i + 1])
-            elif game[i] == 'X' or game[i] == 'x':
+            elif game[i].lower() == 'x':
                 result += get_value(game[i + 1])
                 if game[i + 2] == '/':
                     result += 10 - get_value(game[i + 1])
@@ -21,11 +26,11 @@ def score(game):
         last = get_value(game[i])
         if not in_first_half:
             frame += 1
-        if in_first_half == True:
+        if in_first_half:
             in_first_half = False
         else:
             in_first_half = True
-        if game[i] == 'X' or game[i] == 'x':
+        if game[i].lower() == 'x':
             in_first_half = True
             frame += 1
     return result
