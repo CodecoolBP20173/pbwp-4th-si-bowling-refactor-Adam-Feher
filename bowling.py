@@ -13,16 +13,20 @@ def change_score(game, frame, in_first_half, result, last):
     game = game.lower()
     for i in range(len(game)):
         result += add_base_points(game[i], last)
-        if is_add_bonus_points_available(frame, game[i]):
+        if is_bonus_points_avaiable(frame, game[i]):
             result += add_bonus_points(game, i)
         last = get_value(game[i])
 
-        if not in_first_half or game[i] == STRIKE:
-            in_first_half = True
-            frame += 1
-        else:
-            in_first_half = False
+        in_first_half, frame = turn_process(in_first_half, game[i], frame)
     return result
+
+def turn_process(in_first_half, current_turn, frame):
+    if not in_first_half or current_turn == STRIKE:
+        in_first_half = True
+        return in_first_half, frame + 1
+    else:
+        in_first_half = False
+        return in_first_half, frame
 
 def add_base_points(current_turn, last):
     if current_turn == SPARE:
@@ -30,7 +34,7 @@ def add_base_points(current_turn, last):
     else:
         return get_value(current_turn)
 
-def is_add_bonus_points_available(frame, current_turn):
+def is_bonus_points_avaiable(frame, current_turn):
     return frame < 10 and current_turn in (STRIKE, SPARE)
 
 
